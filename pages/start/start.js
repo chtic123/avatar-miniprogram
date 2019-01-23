@@ -21,6 +21,12 @@ Page({
     })
   },
   onAuthorize(res) {
+    wx.cloud.callFunction({
+      name: 'login',
+      data: res.detail
+    }).then(r => {
+      console.log(r)
+    })
     const { userInfo } = res.detail
 
     app.globalData.userInfo = userInfo

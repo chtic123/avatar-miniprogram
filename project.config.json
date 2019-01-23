@@ -1,5 +1,6 @@
 {
 	"description": "项目配置文件",
+  "cloudfunctionRoot": "/cloudfunctions",
 	"packOptions": {
 		"ignore": []
 	},
@@ -12,7 +13,7 @@
 		"autoAudits": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.0.4",
+	"libVersion": "2.2.5",
 	"appid": "wxc3693366d4ee7f5f",
 	"projectname": "avatar",
 	"debugOptions": {
