@@ -1,0 +1,58 @@
+<!--index.wxml-->
+<view class="container bg-color">
+  <view class="canvas-container">
+    <canvas
+      class="canvas"
+      canvas-id="canvas"
+      catchtouchstart="onTouchStart"
+      catchtouchmove="onTouchMove"
+    />
+  </view>
+  <view class="swiper-container">
+    <view class="btn-group">
+      <view bindtap="onChangeType" data-type="{{1}}" class="custom-btn {{type === 1 ? 'active' : ''}}">现成像框</view>
+      <view bindtap="onChangeType" data-type="{{2}}" class="custom-btn {{type === 2 ? 'active' : ''}}">自定义</view>
+    </view>
+    <view class="swiper" wx:if="{{type === 1}}">
+      <swiper
+        class="swiper-template"
+        display-multiple-items="{{5}}"
+        circular="{{true}}"
+      >
+        <swiper-item wx:for="{{templates}}" wx:key="{{url}}">
+          <view class="swiper-item" bindtap="onTemplateTap" data-index="{{index}}">
+            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+    <view class="swiper" wx:else>
+      <swiper
+        class="swiper-custom"
+        display-multiple-items="{{5}}"
+        circular="{{true}}"
+      >
+        <swiper-item wx:for="{{templates}}" wx:key="{{url}}">
+          <view class="swiper-item" bindtap="onTemplateTap" data-index="{{index}}">
+            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+          </view>
+        </swiper-item>
+      </swiper>
+      <swiper
+        class="swiper-custom"
+        display-multiple-items="{{5}}"
+        circular="{{true}}"
+      >
+        <swiper-item wx:for="{{ornaments}}" wx:key="{{url}}">
+          <view class="swiper-item" bindtap="onOrnamentTap" data-index="{{index}}">
+            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+  </view>
+  <view class="btn-save" bindtap="onSave">
+    <image class="btn-image" mode="widthFix" src="../../images/save.png" />
+  </view>
+</view>
