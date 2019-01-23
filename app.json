@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/start/start",
+    "pages/index/index",
+    "pages/editor/editor"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "backgroundColor": "#1e1e1e",
+    "navigationBarTitleText": "Avatar"
+  }
+}
