@@ -1,0 +1,33 @@
+<!--miniprogram/pages/upload/upload.wxml-->
+<view class="container">
+  <view class="tool-bar">
+    <button
+      size="mini"
+      bindtap="onToggle"
+      type="{{isHandling ? 'primary' : 'default'}}"
+    >{{isHandling ? '完成' : '整理'}}</button>
+  </view>
+  <view class="list-container">
+    <scroll-view scroll-y="{{true}}" style="height: 100%;">
+      <view class="scroll-container">
+        <view class="image-item">
+          <view class="image-container">
+            <view class="add-btn" bindtap="onUpload">+</view>
+          </view>
+        </view>
+        <view wx:for="{{list}}" wx:key="{{url}}" class="image-item">
+          <view class="image-container">
+            <image
+              mode="aspectFit"
+              class="image-cover"
+              src="{{item.url}}"
+            />
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  <view class="footer-bar" wx:if="{{isHandling}}">
+    <button size="mini" type="warn" disabled="{{!canDel}}">删除</button>
+  </view>
+</view>

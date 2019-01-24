@@ -2,11 +2,12 @@
   "pages": [
     "pages/start/start",
     "pages/index/index",
-    "pages/editor/editor"
+    "pages/editor/editor",
+    "pages/upload/upload"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "backgroundColor": "#1e1e1e",
-    "navigationBarTitleText": "Avatar"
+    "navigationBarTitleText": "欢乐头像框"
   }
 }

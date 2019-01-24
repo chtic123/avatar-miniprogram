@@ -15,7 +15,8 @@ Page({
     const ctx = wx.createCanvasContext('canvas')
     this.setData({
       ctx,
-      canvasWidth: app.globalData.sysInfo.windowWidth * 0.8
+      canvasWidth: app.globalData.sysInfo.windowWidth * 0.8,
+      isAdmin: app.isAdmin
     })
 
     const { path, posX, posY, width, height } = app.globalData.imageInfo
@@ -28,32 +29,28 @@ Page({
     }
 
     this.drawImage(ctx, [config.image])
+    this.getSwiperItems()
+    
     ctx.draw()
   },
   data: {
     ctx: {},
+    pageInited: false,
     canvasWidth: 0,
     type: 1,
-    templates: [
-      { url: '../../images/templates/1.png' },
-      { url: '../../images/templates/1.png' },
-      { url: '../../images/templates/1.png' },
-      { url: '../../images/templates/1.png' },
-      { url: '../../images/templates/1.png' },
-      { url: '../../images/templates/1.png' }
-    ],
-    ornaments: [
-      { url: '../../images/ornaments/1.png' },
-      { url: '../../images/ornaments/1.png' },
-      { url: '../../images/ornaments/1.png' },
-      { url: '../../images/ornaments/1.png' },
-      { url: '../../images/ornaments/1.png' },
-      { url: '../../images/ornaments/1.png' }
-    ],
+    templates: {
+      showItem: 1,
+      list: []
+    },
+    ornaments: {
+      showItem: 1,
+      list: []
+    },
     selectTemplate: {},
     selectOrnaments: [],
     current: null,
-    tapType: 'move'
+    tapType: 'move',
+    isAdmin: false
   },
   onChangeType(e) {
     this.setData({
@@ -66,7 +63,7 @@ Page({
 
     this.setData({
       selectTemplate: {
-        path: templates[index].url,
+        path: templates.list[index].url,
         posX: 0,
         posY: 0,
         width: canvasWidth,
@@ -86,14 +83,14 @@ Page({
       mask: true
     })
     wx.getImageInfo({
-      src: ornaments[index].url,
+      src: ornaments.list[index].url,
       success: res => {
         const { width, height } = res
         const drawWidth = ornamentWidth
         const drawHeight = height * drawWidth / width
 
         selectOrnaments.push({
-          path: ornaments[index].url,
+          path: ornaments.list[index].url,
           posX: (canvasWidth - drawWidth) / 2,
           posY: (canvasWidth - drawHeight) / 2,
           width: drawWidth,
@@ -374,6 +371,93 @@ Page({
           }
         })
       }
+    })
+  },
+  getSwiperItems() {
+    this.getTemplates()
+      .then(templates => {
+        this.setUrl(templates, 'templates')
+      })
+    this.getOrnaments()
+      .then(ornaments => {
+        this.setUrl(ornaments, 'ornaments')
+      })
+  },
+  setUrl(list, collection) {
+    const urlList = list.map(item => item.url)
+    const count = urlList.length
+    let index = 0
+    const getList = []
+    while (index < count) {
+      const end = (index + 50) < count ? (index + 50) : count
+      getList.push(wx.cloud.getTempFileURL({
+        fileList: urlList.slice(index, end)
+      }))
+
+      index += 50
+    }
+
+    if (getList.length > 0) {
+      Promise.all(getList)
+        .then(result => {
+          return [].concat(...result.map(rs => rs.fileList))
+        })
+        .then(list => {
+          this.setData({
+            [collection]: {
+              showItem: list.length > 6 ? 6 : list.length,
+              list: list.map(item => ({ url: item.tempFileURL }))
+            }
+          })
+        })
+    }
+  },
+  getTemplates() {
+    return this.getData('template')
+  },
+  getOrnaments() {
+    return this.getData('ornament')
+  },
+  getData(collection) {
+    return app.db.collection(collection).count()
+      .then(res => {
+        const count = res.total
+        let index = 0
+        const getList = []
+        while(index < count) {
+          if (index === 0) {
+            getList.push(app.db.collection(collection).get())
+          } else {
+            getList.push(app.db.collection(collection).skip(index).get())
+          }
+          
+          index += 20
+        }
+
+        if (getList.length > 0) {
+          return Promise.all(getList)
+            .then(result => {
+              return [].concat(...result.map(rs => rs.data))
+            })
+        }
+
+        return Promise.resolve([])
+      })
+      .catch(err => {
+        console.error(err)
+        wx.showToast({
+          title: `获取${collection}失败`
+        })
+      })
+  },
+  uploadTemplate() {
+    wx.navigateTo({
+      url: '/pages/upload/upload?type=template',
+    })
+  },
+  uploadOrnament() {
+    wx.navigateTo({
+      url: '/pages/upload/upload?type=ornament',
     })
   }
 })

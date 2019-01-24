@@ -60,8 +60,45 @@
   margin: 0 4%;
 }
 
+.swiper-template .swiper-item-add {
+  height: 100%;
+  width: 92%;
+  margin: 0 4%;
+  box-sizing: border-box;
+  border: 1px dashed darkgray;
+  position: absolute;
+}
+
+.swiper-template .swiper-item-add:before {
+  content: '';
+  height: 4px;
+  max-width: 100px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  margin: auto;
+  background-color: darkgray;
+  border-radius: 4px;
+}
+
+.swiper-template .swiper-item-add:after {
+  content: '';
+  width: 4px;
+  max-height: 100px;
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: darkgray;
+  border-radius: 4px;
+}
+
 .swiper-custom {
-  height: 50%;
+  height: 49%;
 }
 
 .swiper-custom .swiper-item {
@@ -72,6 +109,43 @@
   height: 100%;
   width: 92%;
   margin: 0 4%;
+}
+
+.swiper-custom .swiper-item-add {
+  height: 100%;
+  width: 92%;
+  margin: 0 4%;
+  box-sizing: border-box;
+  border: 1px dashed darkgray;
+  position: absolute;
+}
+
+.swiper-custom .swiper-item-add:before {
+  content: '';
+  height: 4px;
+  max-width: 60px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  margin: auto;
+  background-color: darkgray;
+  border-radius: 4px;
+}
+
+.swiper-custom .swiper-item-add:after {
+  content: '';
+  width: 4px;
+  max-height: 60px;
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: darkgray;
+  border-radius: 4px;
 }
 
 .btn-save {

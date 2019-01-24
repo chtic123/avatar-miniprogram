@@ -23,20 +23,21 @@ Page({
   onAuthorize(res) {
     const { userInfo } = res.detail
 
-    app.globalData.userInfo = userInfo
+    if (userInfo) {
+      this.getUserPermission()
 
-    this.setData({
-      hasAuthorize: true
-    })
-    
-    wx.cloud.callFunction({
-      name: 'login',
-      data: res.detail
-    }).then(({ result: { openid }}) => {
-      console.log(openid)
-    }).catch(err => {
-      app.isAdmin = false
-    })
+      app.globalData.userInfo = userInfo
+
+      this.setData({
+        hasAuthorize: true
+      })
+
+      wx.redirectTo({
+        url: '/pages/index/index',
+      })
+    } else {
+      this.onError()
+    }
   },
   onError() {
     wx.showToast({
@@ -54,6 +55,34 @@ Page({
         this.onAuthorize({ detail: res })
       },
       fail: this.onError
+    })
+  },
+  getUserPermission() {
+    wx.cloud.callFunction({
+      name: 'login'
+    }).then(({ result: { openid }}) => {
+      app.openid = openid
+      return Promise.all([app.db.collection('user').where({
+        id: openid
+      }).get(), Promise.resolve(openid)])
+    }).then(([user, openid]) => {
+      if (user.data.length === 0) {
+        app.db.collection('user').add({
+          data: {
+            id: openid,
+            role: 0
+          }
+        })
+      } else {
+        const u = user.data[0]
+        if (u.role === 100) {
+          app.isAdmin = true
+          return
+        }
+      }
+      app.isAdmin = false
+    }).catch(err => {
+      app.isAdmin = false
     })
   }
 })

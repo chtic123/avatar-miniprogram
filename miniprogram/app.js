@@ -12,5 +12,7 @@ App({
     userInfo: null,
     sysInfo: null,
     imageInfo: {}
-  }
+  },
+  isAdmin: false,
+  openid: 'unKownOpenId'
 })

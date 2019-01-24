@@ -16,13 +16,17 @@
     <view class="swiper" wx:if="{{type === 1}}">
       <swiper
         class="swiper-template"
-        display-multiple-items="{{5}}"
-        circular="{{true}}"
+        display-multiple-items="{{templates.showItem}}"
       >
-        <swiper-item wx:for="{{templates}}" wx:key="{{url}}">
+        <swiper-item wx:if="{{isAdmin}}">
+          <view class="swiper-item" bindtap="uploadTemplate">
+            <view class="swiper-item-add" />
+          </view>
+        </swiper-item>
+        <swiper-item wx:for="{{templates.list}}" wx:key="{{url}}">
           <view class="swiper-item" bindtap="onTemplateTap" data-index="{{index}}">
-            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
-            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+            <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+            <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
           </view>
         </swiper-item>
       </swiper>
@@ -30,23 +34,32 @@
     <view class="swiper" wx:else>
       <swiper
         class="swiper-custom"
-        display-multiple-items="{{5}}"
-        circular="{{true}}"
+        display-multiple-items="{{templates.showItem}}"
       >
-        <swiper-item wx:for="{{templates}}" wx:key="{{url}}">
+        <swiper-item wx:if="{{isAdmin}}">
+          <view class="swiper-item" bindtap="uploadTemplate">
+            <view class="swiper-item-add" />
+          </view>
+        </swiper-item>
+        <swiper-item wx:for="{{templates.list}}" wx:key="{{url}}">
           <view class="swiper-item" bindtap="onTemplateTap" data-index="{{index}}">
-            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+            <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
           </view>
         </swiper-item>
       </swiper>
+      <view style="height: 2%;"></view>
       <swiper
         class="swiper-custom"
-        display-multiple-items="{{5}}"
-        circular="{{true}}"
+        display-multiple-items="{{ornaments.showItem}}"
       >
-        <swiper-item wx:for="{{ornaments}}" wx:key="{{url}}">
+        <swiper-item wx:if="{{isAdmin}}">
+          <view class="swiper-item" bindtap="uploadOrnament">
+            <view class="swiper-item-add" />
+          </view>
+        </swiper-item>
+        <swiper-item wx:for="{{ornaments.list}}" wx:key="{{url}}">
           <view class="swiper-item" bindtap="onOrnamentTap" data-index="{{index}}">
-            <image src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+            <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
           </view>
         </swiper-item>
       </swiper>
