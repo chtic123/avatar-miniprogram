@@ -44,10 +44,18 @@
   flex: 1 0;
   padding: 20rpx;
   background-color: #fff;
+  position: relative;
 }
 
 .swiper-template {
-  height: 100%;
+  height: 50%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  margin: auto;
 }
 
 .swiper-template .swiper-item {
@@ -55,7 +63,7 @@
 }
 
 .swiper-template .swiper-item-cover {
-  height: 50%;
+  height: 100%;
   width: 92%;
   margin: 0 4%;
 }

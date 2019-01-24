@@ -238,6 +238,7 @@ Page({
   drawDashRect(ctx, elements, isSave) {
     elements.forEach(ele => {
       const { path, posX, posY, width, height, rotate } = ele
+      console.log('ornament =>', path)
       const middle = {
         x: posX + width / 2,
         y: posY + height / 2
@@ -385,32 +386,25 @@ Page({
   },
   setUrl(list, collection) {
     const urlList = list.map(item => item.url)
-    const count = urlList.length
-    let index = 0
-    const getList = []
-    while (index < count) {
-      const end = (index + 50) < count ? (index + 50) : count
-      getList.push(wx.cloud.getTempFileURL({
-        fileList: urlList.slice(index, end)
-      }))
-
-      index += 50
-    }
-
-    if (getList.length > 0) {
-      Promise.all(getList)
-        .then(result => {
-          return [].concat(...result.map(rs => rs.fileList))
-        })
-        .then(list => {
-          this.setData({
-            [collection]: {
-              showItem: list.length > 6 ? 6 : list.length,
-              list: list.map(item => ({ url: item.tempFileURL }))
-            }
-          })
-        })
-    }
+    Promise.all(urlList.map(url => new Promise((resolve, reject) => {
+      wx.getImageInfo({
+        src: url,
+        success: res => {
+          resolve({ url: res.path })
+        },
+        fail: err => {
+          console.error(err)
+          reject(err)
+        }
+      })
+    }))).then(trueList => {
+      this.setData({
+        [collection]: {
+          showItem: trueList.length > 6 ? 6 : trueList.length,
+          list: trueList
+        }
+      })
+    })
   },
   getTemplates() {
     return this.getData('template')

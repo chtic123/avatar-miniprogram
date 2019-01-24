@@ -26,7 +26,6 @@
         <swiper-item wx:for="{{templates.list}}" wx:key="{{url}}">
           <view class="swiper-item" bindtap="onTemplateTap" data-index="{{index}}">
             <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
-            <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
           </view>
         </swiper-item>
       </swiper>
