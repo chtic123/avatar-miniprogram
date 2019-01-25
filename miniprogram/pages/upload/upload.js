@@ -192,7 +192,8 @@ Page({
 
           this.setData({
             delList: [],
-            delFileList: []
+            delFileList: [],
+            canDel: false
           })
           
           this.getData(this.data.type, function () {
@@ -205,7 +206,8 @@ Page({
           console.log(error)
           this.setData({
             delList: [],
-            delFileList: []
+            delFileList: [],
+            canDel: false
           })
 
           this.getData(this.data.type, function () {
@@ -221,7 +223,8 @@ Page({
         console.log(error)
         this.setData({
           delList: [],
-          delFileList: []
+          delFileList: [],
+          canDel: false
         })
 
         this.getData(this.data.type, function () {
