@@ -14,5 +14,10 @@ App({
     imageInfo: {}
   },
   isAdmin: false,
-  openid: 'unKownOpenId'
+  openid: 'unKownOpenId',
+  images: {
+    templates: [],
+    ornaments: [],
+    frames: []
+  }
 })

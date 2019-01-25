@@ -16,7 +16,13 @@
           </view>
         </view>
         <view wx:for="{{list}}" wx:key="{{url}}" class="image-item">
-          <view class="image-container">
+          <view
+            class="image-container {{item.selected && isHandling ? 'selected' : ''}}"
+            bindtap="onSelect"
+            data-id="{{item.id}}"
+            data-file="{{item.fileId}}"
+          >
+            <view class="selected-hook" wx:if="{{item.selected && isHandling}}"></view>
             <image
               mode="aspectFit"
               class="image-cover"
@@ -28,6 +34,6 @@
     </scroll-view>
   </view>
   <view class="footer-bar" wx:if="{{isHandling}}">
-    <button size="mini" type="warn" disabled="{{!canDel}}">删除</button>
+    <button size="mini" type="warn" bindtap="onDelete" disabled="{{!canDel}}">删除</button>
   </view>
 </view>

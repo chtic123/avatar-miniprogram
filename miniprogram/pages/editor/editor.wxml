@@ -14,34 +14,44 @@
       <view bindtap="onChangeType" data-type="{{2}}" class="custom-btn {{type === 2 ? 'active' : ''}}">自定义</view>
     </view>
     <view class="swiper" wx:if="{{type === 1}}">
-      <swiper
-        class="swiper-template"
-        display-multiple-items="{{templates.showItem}}"
-      >
-        <swiper-item wx:if="{{isAdmin}}">
-          <view class="swiper-item" bindtap="uploadTemplate">
-            <view class="swiper-item-add" />
+      <scroll-view scroll-y="{{true}}" style="height: 100%;">
+        <view class="template-container">
+          <view wx:if="{{isAdmin}}" class="template-item" bindtap="uploadTemplate">
+            <view class="template-image-container">
+              <view class="template-add" />
+            </view>
           </view>
-        </swiper-item>
-        <swiper-item wx:for="{{templates.list}}" wx:key="{{url}}">
-          <view class="swiper-item" bindtap="onTemplateTap" data-index="{{index}}">
-            <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
+          <view
+            class="template-item"
+            wx:for="{{templates.list}}"
+            wx:key="{{url}}"
+            bindtap="onTemplateTap"
+            data-index="{{index}}"
+          >
+            <view class="template-image-container {{item.url === '' ? 'no-image' : ''}}">
+              <image
+                lazy-load="{{true}}"
+                src="{{item.url}}"
+                mode="aspectFit"
+                class="template-image"
+              />
+            </view>
           </view>
-        </swiper-item>
-      </swiper>
+        </view>
+      </scroll-view>
     </view>
     <view class="swiper" wx:else>
       <swiper
         class="swiper-custom"
-        display-multiple-items="{{templates.showItem}}"
+        display-multiple-items="{{frames.showItem}}"
       >
         <swiper-item wx:if="{{isAdmin}}">
-          <view class="swiper-item" bindtap="uploadTemplate">
+          <view class="swiper-item" bindtap="uploadFrame">
             <view class="swiper-item-add" />
           </view>
         </swiper-item>
-        <swiper-item wx:for="{{templates.list}}" wx:key="{{url}}">
-          <view class="swiper-item" bindtap="onTemplateTap" data-index="{{index}}">
+        <swiper-item wx:for="{{frames.list}}" wx:key="{{url}}">
+          <view class="swiper-item" bindtap="onFrameTap" data-index="{{index}}">
             <image lazy-load="{{true}}" src="{{item.url}}" mode="aspectFit" class="swiper-item-cover" />
           </view>
         </swiper-item>

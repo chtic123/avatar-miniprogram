@@ -13,11 +13,39 @@ const ornamentWidth = 50
 Page({
   onLoad() {
     const ctx = wx.createCanvasContext('canvas')
+    const { templates, ornaments, frames } = app.images
     this.setData({
       ctx,
       canvasWidth: app.globalData.sysInfo.windowWidth * 0.8,
-      isAdmin: app.isAdmin
+      isAdmin: app.isAdmin,
+      templates: {
+        showItem: templates.length > 6 ? 6 : templates.length,
+        list: templates
+      },
+      ornaments: {
+        showItem: ornaments.length > 6 ? 6 : ornaments.length,
+        list: ornaments
+      },
+      frames: {
+        showItem: frames.length > 6 ? 6 : frames.length,
+        list: frames
+      }
     })
+
+    app.getUserPermissionCallback = () => {
+      this.setData({
+        isAdmin: true
+      })
+    }
+
+    app.getSwiperItemCallback = (collection, list) => {
+      this.setData({
+        [collection]: {
+          showItem: list.length > 6 ? 6 : list.length,
+          list: list
+        }
+      })
+    }
 
     const { path, posX, posY, width, height } = app.globalData.imageInfo
     config.image = {
@@ -29,7 +57,6 @@ Page({
     }
 
     this.drawImage(ctx, [config.image])
-    this.getSwiperItems()
     
     ctx.draw()
   },
@@ -43,6 +70,10 @@ Page({
       list: []
     },
     ornaments: {
+      showItem: 1,
+      list: []
+    },
+    frames: {
       showItem: 1,
       list: []
     },
@@ -64,6 +95,22 @@ Page({
     this.setData({
       selectTemplate: {
         path: templates.list[index].url,
+        posX: 0,
+        posY: 0,
+        width: canvasWidth,
+        height: canvasWidth
+      }
+    })
+
+    this.drawImageCanvas(false)
+  },
+  onFrameTap(e) {
+    const index = e.currentTarget.dataset.index
+    const { frames, canvasWidth } = this.data
+
+    this.setData({
+      selectTemplate: {
+        path: frames.list[index].url,
         posX: 0,
         posY: 0,
         width: canvasWidth,
@@ -374,84 +421,19 @@ Page({
       }
     })
   },
-  getSwiperItems() {
-    this.getTemplates()
-      .then(templates => {
-        this.setUrl(templates, 'templates')
-      })
-    this.getOrnaments()
-      .then(ornaments => {
-        this.setUrl(ornaments, 'ornaments')
-      })
-  },
-  setUrl(list, collection) {
-    const urlList = list.map(item => item.url)
-    Promise.all(urlList.map(url => new Promise((resolve, reject) => {
-      wx.getImageInfo({
-        src: url,
-        success: res => {
-          resolve({ url: res.path })
-        },
-        fail: err => {
-          console.error(err)
-          reject(err)
-        }
-      })
-    }))).then(trueList => {
-      this.setData({
-        [collection]: {
-          showItem: trueList.length > 6 ? 6 : trueList.length,
-          list: trueList
-        }
-      })
-    })
-  },
-  getTemplates() {
-    return this.getData('template')
-  },
-  getOrnaments() {
-    return this.getData('ornament')
-  },
-  getData(collection) {
-    return app.db.collection(collection).count()
-      .then(res => {
-        const count = res.total
-        let index = 0
-        const getList = []
-        while(index < count) {
-          if (index === 0) {
-            getList.push(app.db.collection(collection).get())
-          } else {
-            getList.push(app.db.collection(collection).skip(index).get())
-          }
-          
-          index += 20
-        }
-
-        if (getList.length > 0) {
-          return Promise.all(getList)
-            .then(result => {
-              return [].concat(...result.map(rs => rs.data))
-            })
-        }
-
-        return Promise.resolve([])
-      })
-      .catch(err => {
-        console.error(err)
-        wx.showToast({
-          title: `获取${collection}失败`
-        })
-      })
-  },
   uploadTemplate() {
     wx.navigateTo({
-      url: '/pages/upload/upload?type=template',
+      url: '/pages/upload/upload?type=template&collection=templates',
+    })
+  },
+  uploadFrame() {
+    wx.navigateTo({
+      url: '/pages/upload/upload?type=frame&collection=frames',
     })
   },
   uploadOrnament() {
     wx.navigateTo({
-      url: '/pages/upload/upload?type=ornament',
+      url: '/pages/upload/upload?type=ornament&collection=ornaments',
     })
   }
 })
