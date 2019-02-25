@@ -28,3 +28,10 @@
 .btn-image {
   width: 300rpx;
 }
+
+.explain {
+  color: white;
+  display: block;
+  text-align: center;
+  font-size: 0.8rem;
+}

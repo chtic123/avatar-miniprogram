@@ -6,7 +6,7 @@
 
 .author-btn {
   position: fixed;
-  top: 50%;
+  bottom: 10%;
   left: 50%;
   width: 200px;
   margin-left: -100px;

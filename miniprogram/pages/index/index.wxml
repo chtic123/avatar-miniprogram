@@ -8,6 +8,7 @@
       catchtouchmove="onTouchMove"
       catchtouchend="onTouchEnd"
     />
+    <text class="explain">可拖拽缩放，也可以本地选择其他图片</text>
   </view>
   
   <view class="btn-group">

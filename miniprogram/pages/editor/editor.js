@@ -37,12 +37,14 @@ Page({
         isAdmin: true
       })
     }
-
-    app.getSwiperItemCallback = (collection, list) => {
+ 
+    app.getSwiperItemCallback = (collection, data, index) => {
+      const list = app.images[collection]
+      list[index] = data
       this.setData({
         [collection]: {
           showItem: list.length > 6 ? 6 : list.length,
-          list: list
+          list
         }
       })
     }

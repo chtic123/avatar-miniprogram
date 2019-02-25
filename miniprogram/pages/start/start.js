@@ -20,14 +20,12 @@ Page({
       }
     })
   },
-  onShow() {
-    this.getSwiperItems()
-  },
   onAuthorize(res) {
     const { userInfo } = res.detail
 
     if (userInfo) {
       this.getUserPermission()
+      this.getSwiperItems()
 
       app.globalData.userInfo = userInfo
 
@@ -104,20 +102,18 @@ Page({
       })
   },
   setUrl(list, collection) {
-    Promise.all(list.map(item => new Promise((resolve, reject) => {
+    list.map((item, index) => {
       wx.getImageInfo({
         src: item.url,
         success: res => {
-          resolve({ url: res.path, id: item._id, fileId: item.url })
+          const imageData = { url: res.path, id: item._id, fileId: item.url }
+          app.images[collection][index] = imageData
+          app.getSwiperItemCallback && app.getSwiperItemCallback(collection, imageData, index)
         },
         fail: err => {
           console.error(err)
-          reject(err)
         }
       })
-    }))).then(trueList => {
-      app.images[collection] = trueList
-      app.getSwiperItemCallback && app.getSwiperItemCallback(collection, trueList)
     })
   },
   getTemplates() {
